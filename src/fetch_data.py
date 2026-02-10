@@ -3,17 +3,32 @@ import json
 with open(r"C:\Users\Pa Musa Ngom\OneDrive\Documents\premier-league-predictor\data\premier_league.json", "r", encoding="utf-8") as f:
     data = json.load(f)
 
-for match in data["matches"][:5]:
+matches = []
+
+
+for match in data["matches"]:
     home = match["team1"]
     away = match["team2"]
     
-    score = match.get("score")
+    score = match.get("score", {})
 
-    if score and "ft" in score:
-        score1 = score["ft"][0]
-        score2 = score["ft"][1] 
+    if "ft" in score:
+        home_goals = score["ft"][0]
+        away_goals = score["ft"][1] 
+        played = True
+    
     else:
-        score1 = "TBD"
-        score2 = "TBD"
-        
-    print(f"{home} vs {away} | Score: {score1}-{score2}")
+        home_goals = None
+        away_goals = None
+        played = False
+
+    matches.append({
+        "home_team": home,
+        "away_team": away,
+        "home_goals": home_goals,
+        "away_goals": away_goals,
+        "played": played
+    })
+
+for m in matches[:5]:
+    print(m)
